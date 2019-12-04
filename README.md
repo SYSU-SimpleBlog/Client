@@ -1,8 +1,8 @@
 # Front-End
 
-> A simple vue project build by webpack
+> A simple vue project built by webpack
 
-### usage
+## usage
 
 ```/
 # install dependencies
