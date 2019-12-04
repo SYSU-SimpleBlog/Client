@@ -4,6 +4,8 @@ import App from './App.vue'
 import router from './router/router'
 // import './assets/styles/index.scss'
 
+require('./mock/articlemock.js')
+
 new Vue({
   //注入router
   router,
