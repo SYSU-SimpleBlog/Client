@@ -46,7 +46,7 @@ module.exports = {
       },{
         test: /\.js$/, exclude: /node_modules/,
         loader: "babel-loader"
-      }
+      },{ test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/, loader: "file-loader" },
     ]
   },
   plugins: [
@@ -62,5 +62,5 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     }
-  },
+  }
 };

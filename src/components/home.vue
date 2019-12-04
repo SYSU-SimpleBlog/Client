@@ -1,6 +1,8 @@
 <template>
     <div>
         <h1>{{ helloMessage }}</h1>
+        <router-link to="/signin">登录</router-link>
+        <router-link to="/articleDetail">文章详情</router-link>
     </div>
 </template>
 
@@ -33,6 +35,6 @@ export default {
                 console.log(err)
             })
         }
-    },
+    }
 }
 </script>
