@@ -1,4 +1,11 @@
 $appColor:red;
+
+html, body{
+  height: 100%;
+  position: relative;
+}
+
 #app{
-  color:$appColor;
+  min-height: 100%;
+  position: relative;
 }

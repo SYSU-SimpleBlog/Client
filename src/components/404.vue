@@ -13,6 +13,14 @@ export default {
 </script>
 
 <style scoped>
-
-
+    div{
+        text-align: center;
+    }
+    h1{
+        margin-top: 100px;
+        font-size: 40px;
+    }
+    p{
+        margin: 20px 0;
+    }
 </style>

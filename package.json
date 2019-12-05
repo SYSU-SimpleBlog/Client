@@ -41,6 +41,7 @@
     "@babel/polyfill": "^7.7.0",
     "axios": "^0.19.0",
     "babel-loader": "^8.0.6",
+    "marked": "^0.7.0",
     "save": "^2.4.0",
     "view-design": "^4.0.2",
     "vue": "^2.6.10",

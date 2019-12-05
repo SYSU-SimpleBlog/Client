@@ -6,9 +6,18 @@ import 'view-design/dist/styles/iview.css';
 
 //引入router组件
 import router from './router/router'
-// import './assets/styles/index.scss'
+import './assets/styles/index.scss'
 
 Vue.use(ViewUI);
+
+router.beforeEach((to, from, next) => {
+  ViewUI.LoadingBar.start();
+  next();
+});
+
+router.afterEach(route => {
+  ViewUI.LoadingBar.finish();
+});
 
 require('./mock/articlemock.js')
 
