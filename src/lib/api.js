@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios from 'axios'
 import qs from 'qs'
-let domain = ''
+let domain = 'http://localhost:8080/simpleblog'
 export const getDomain = () => {
   return domain
 }

@@ -19,7 +19,7 @@ router.afterEach(route => {
   ViewUI.LoadingBar.finish();
 });
 
-require('./mock/articlemock.js')
+//require('./mock/articlemock.js')
 
 new Vue({
   //注入router
