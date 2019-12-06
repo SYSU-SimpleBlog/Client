@@ -20,6 +20,7 @@
 </template>
 
 <script>
+    import { SignIn } from '../lib/api.js'
     export default {
         name: 'signIn',
         components: {},
@@ -38,6 +39,9 @@
         methods: {
             handleSignIn() {
                 this.loading = true
+                SignIn({
+
+                }).then
 
                 // 全局通知
                 this.$Notice.success({

@@ -134,7 +134,7 @@ export const GetArticleByIdURL = function(parameters = {}) {
 export const DeleteArticleById = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   const config = parameters.$config
-  let path = '/user/article/{id}'
+  let path = '/user/deleteArticle/{id}'
   let body
   let queryParameters = {}
   let form = {}
@@ -147,18 +147,18 @@ export const DeleteArticleById = function(parameters = {}) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
     });
   }
-  return request('delete', domain + path, body, queryParameters, form, config)
+  return request('get', domain + path, body, queryParameters, form, config)
 }
 export const DeleteArticleById_RAW_URL = function() {
-  return '/user/article/{id}'
+  return '/user/deleteArticle/{id}'
 }
 export const DeleteArticleById_TYPE = function() {
-  return 'delete'
+  return 'get'
 }
 export const DeleteArticleByIdURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/user/article/{id}'
+  let path = '/user/deleteArticle/{id}'
   path = path.replace('{id}', `${parameters['id']}`)
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -291,13 +291,13 @@ export const SignIn = function(parameters = {}) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
     });
   }
-  return request('post', domain + path, body, queryParameters, form, config)
+  return request('get', domain + path, body, queryParameters, form, config)
 }
 export const SignIn_RAW_URL = function() {
   return '/user/signin'
 }
 export const SignIn_TYPE = function() {
-  return 'post'
+  return 'get'
 }
 export const SignInURL = function(parameters = {}) {
   let queryParameters = {}
