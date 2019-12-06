@@ -1,13 +1,14 @@
 <template>
     <div id="article">
         <BackTop :height="100"></BackTop>
-        <h1>大型网站架构技术演进（史上最全）</h1>
+        <h1>{{ articleData.name }}</h1>
+        <div style="text-align: center">发表时间：{{ articleData.date }}</div>
+        <div id="content">
+            <p v-html="compileMarkdown"></p>
+        </div>
         <div id="tags" style="text-align: center">
             <span><Icon type="md-pricetag"/>网站架构</span>
             <span><Icon type="md-pricetag"/>教程</span>
-        </div>
-        <div id="content">
-            <p v-html="compileMarkdown"></p>
         </div>
         <Divider>文章结束</Divider>
         <div id="comments">
@@ -36,37 +37,49 @@
 
 <script>
     import marked from 'marked'
-
+    import { GetArticleById } from '../lib/api.js'
+    import { GetCommentsOfArticle } from '../lib/api.js'
     export default {
         name: "articlePage",
         components: {},
         data() {
             return {
-                articleDetail: {
+                articleId: '',
+                articleData: {
                     tags: [],
                     title: '',
-                    content: '# 徐肯\n### 徐肯 \n' +
-                        '# f \n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'+
-                        '# f\n'
+                    content: '',
+                    date: '',
                 },
                 isComment: false,
                 commentText: '',
             }
         },
         created() {
-
+            this.articleId = this.$route.params.id
+            this.getArticleData()
+            this.getArticleComment()
         },
         methods: {
+            getArticleData() {
+                GetArticleById({
+                    id: this.articleId
+                }).then(res=>{
+                    this.articleData = res.data
+                }).catch(err=>{
+                    console.log(err)
+                })
+            },
+            getArticleComment(){
+                GetCommentsOfArticle({
+                    id: this.articleId
+                }).then(res=>{
+                    console.log(res.data)
+                }).catch(err=>{
+                    console.log(err)
+                })
+            },
+
             showCommentButton() {
                 if (this.commentText.length > 0)
                     this.isComment = true
@@ -83,7 +96,7 @@
         },
         computed: {
             compileMarkdown: function () {
-                return marked(this.articleDetail.content, {})
+                return marked(this.articleData.content, {})
             }
         }
     }
@@ -97,11 +110,11 @@
 
     h1 {
         text-align: center;
-        margin: 20px 0;
+        margin: 20px 0 5px 0;
         color: black;
     }
 
     #content {
-        margin-top: 30px;
+        margin: 30px 0;
     }
 </style>
