@@ -1,6 +1,6 @@
 <template>
-    <div id="article">
-        <ButtonGroup vertical style="position: fixed; margin-top:0px; margin-left: -50px;">
+    <div id="article" v-if="articleData.content != ''">
+        <ButtonGroup vertical style="position: fixed; margin-top:0px; margin-left: -70px;">
             <Button icon="logo-facebook"></Button>
             <Button icon="logo-twitter"></Button>
             <Button icon="logo-googleplus"></Button>
@@ -11,6 +11,7 @@
         <div style="text-align: center">发表时间：{{ articleData.date }}</div>
         <div id="content">
             <p v-html="compileMarkdown"></p>
+<!--            <vue-markdown :source="articleData.content"></vue-markdown>-->
         </div>
         <div id="tags" style="text-align: center">
             <span v-for="(item) in articleData.tags" style="margin-right: 5px;"><Icon type="md-pricetag"/>{{ item.name }}</span>
@@ -44,13 +45,16 @@
 
 <script>
     import marked from 'marked'
+    // import VueMarkdown from 'vue-markdown'
     import {GetArticleById} from '../lib/api.js'
     import {GetCommentsOfArticle} from '../lib/api.js'
     import {CreateComment} from "../lib/api"
 
     export default {
         name: "articlePage",
-        components: {},
+        components: {
+            // VueMarkdown
+        },
         data() {
             return {
                 articleId: '',

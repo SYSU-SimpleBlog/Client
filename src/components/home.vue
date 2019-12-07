@@ -26,6 +26,8 @@ export default {
         }
     },
     created(){
+        if(window.localStorage.isLogin === '1')
+            this.$router.push('/articleList')
     },
     methods:{
 

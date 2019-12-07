@@ -60,7 +60,8 @@
                             },
                             duration: 4
                         })
-
+                        this.$store.commit('$_setStorage', {user: this.signInForm.username})
+                        this.$store.commit('$_setLogin', '1')
                         this.$router.push('/articleList')
 
                     })

@@ -27,12 +27,19 @@ const routes = [
   {
     path: '/articleList',
     name: 'articleList',
-    component: articleList
+    component: articleList,
+    meta: {
+      auth: true
+    }
   },
   {
-    path: '/articleDetail',
+    path: '/articleDetail/:id',
     name: 'articlePage',
-    component: articlePage
+    component: articlePage,
+    // 需要验证
+    meta: {
+      auth: true
+    }
   },
   // 404页面需要放在最后, 因为路由是从上往下找的，中间如果没找到，就用下一个，所以使用*兜底
   {
