@@ -175,6 +175,7 @@ export const DeleteArticleByIdURL = function(parameters = {}) {
  * method: GetCommentsOfArticle_TYPE
  * raw_url: GetCommentsOfArticle_RAW_URL
  * @param id - The only id of the article to return
+ * @param page - the request page
  */
 export const GetCommentsOfArticle = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
@@ -186,6 +187,12 @@ export const GetCommentsOfArticle = function(parameters = {}) {
   path = path.replace('{id}', `${parameters['id']}`)
   if (parameters['id'] === undefined) {
     return Promise.reject(new Error('Missing required  parameter: id'))
+  }
+  if (parameters['page'] !== undefined) {
+    queryParameters['page'] = parameters['page']
+  }
+  if (parameters['page'] === undefined) {
+    return Promise.reject(new Error('Missing required  parameter: page'))
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -205,6 +212,9 @@ export const GetCommentsOfArticleURL = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   let path = '/user/article/{id}/comments'
   path = path.replace('{id}', `${parameters['id']}`)
+  if (parameters['page'] !== undefined) {
+    queryParameters['page'] = parameters['page']
+  }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]
@@ -219,13 +229,13 @@ export const GetCommentsOfArticleURL = function(parameters = {}) {
  * url: CreateCommentURL
  * method: CreateComment_TYPE
  * raw_url: CreateComment_RAW_URL
- * @param id - 
- * @param body - 
+ * @param id -
+ * @param body -
  */
 export const CreateComment = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   const config = parameters.$config
-  let path = '/user/article/{id}/comments'
+  let path = '/user/article/{id}/comment'
   let body
   let queryParameters = {}
   let form = {}
@@ -247,7 +257,7 @@ export const CreateComment = function(parameters = {}) {
   return request('post', domain + path, body, queryParameters, form, config)
 }
 export const CreateComment_RAW_URL = function() {
-  return '/user/article/{id}/comments'
+  return '/user/article/{id}/comment'
 }
 export const CreateComment_TYPE = function() {
   return 'post'
@@ -255,7 +265,7 @@ export const CreateComment_TYPE = function() {
 export const CreateCommentURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
-  let path = '/user/article/{id}/comments'
+  let path = '/user/article/{id}/comment'
   path = path.replace('{id}', `${parameters['id']}`)
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -271,7 +281,8 @@ export const CreateCommentURL = function(parameters = {}) {
  * url: SignInURL
  * method: SignIn_TYPE
  * raw_url: SignIn_RAW_URL
- * @param body - 
+ * @param username - username
+ * @param password - user password
  */
 export const SignIn = function(parameters = {}) {
   const domain = parameters.$domain ? parameters.$domain : getDomain()
@@ -280,11 +291,17 @@ export const SignIn = function(parameters = {}) {
   let body
   let queryParameters = {}
   let form = {}
-  if (parameters['body'] !== undefined) {
-    body = parameters['body']
+  if (parameters['username'] !== undefined) {
+    queryParameters['username'] = parameters['username']
   }
-  if (parameters['body'] === undefined) {
-    return Promise.reject(new Error('Missing required  parameter: body'))
+  if (parameters['username'] === undefined) {
+    return Promise.reject(new Error('Missing required  parameter: username'))
+  }
+  if (parameters['password'] !== undefined) {
+    queryParameters['password'] = parameters['password']
+  }
+  if (parameters['password'] === undefined) {
+    return Promise.reject(new Error('Missing required  parameter: password'))
   }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
@@ -303,6 +320,12 @@ export const SignInURL = function(parameters = {}) {
   let queryParameters = {}
   const domain = parameters.$domain ? parameters.$domain : getDomain()
   let path = '/user/signin'
+  if (parameters['username'] !== undefined) {
+    queryParameters['username'] = parameters['username']
+  }
+  if (parameters['password'] !== undefined) {
+    queryParameters['password'] = parameters['password']
+  }
   if (parameters.$queryParameters) {
     Object.keys(parameters.$queryParameters).forEach(function(parameterName) {
       queryParameters[parameterName] = parameters.$queryParameters[parameterName]

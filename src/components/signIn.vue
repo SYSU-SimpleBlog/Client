@@ -22,48 +22,54 @@
 
 <script>
     import {SignIn} from '../lib/api.js'
+
     export default {
         name: 'signIn',
         components: {},
         data() {
             return {
                 signInForm: {},
+                userToken: '',
                 rule: {},
-                loading: false
+                loading: false,
             }
-
         },
         created() {
 
         },
         methods: {
             handleSignIn() {
-                console.log(this.signInForm)
                 this.loading = true
                 SignIn(this.signInForm)
                     .then(res => {
-                        console.log(res.token)
-                    }).catch(err => {
-                    console.log(err)
-                })
+                        document.cookie = 'username=' + this.signInForm.username
+                        document.cookie = 'token=' + res.data.token
+                        // 全局通知
+                        this.$Notice.success({
+                            title: '登录成功',
+                            render: h => {
+                                return h('div', [
+                                    h('span', {}, '欢迎,' + this.signInForm.username +'!  这是一个简单的博客网站。详情请见'),
+                                    h('a', {
+                                        attrs: {
+                                            href: 'https://github.com/SYSU-SimpleBlog',
+                                            target: '_blank'
+                                        }
+                                    }, 'Github')
+                                ])
+                            },
+                            duration: 4
+                        })
 
-                // 全局通知
-                this.$Notice.success({
-                    title: '登录成功',
-                    render: h => {
-                        return h('div', [
-                            h('span', {}, '欢迎使用. 这是一个简单的博客网站。详情请见'),
-                            h('a', {
-                                attrs: {
-                                    href: 'https://github.com/SYSU-SimpleBlog',
-                                    target: '_blank'
-                                }
-                            }, 'Github')
-                        ])
-                    },
-                    duration: 4
-                })
-                //this.$router.push('/articleList')
+                        this.$router.push('/articleList')
+
+                    })
+                    .catch(err => {
+                        // 404的错误码有点问题
+                        console.log(err)
+                        this.$Message.error("用户名或密码错误")
+                        this.loading = false
+                    })
             }
         }
     }

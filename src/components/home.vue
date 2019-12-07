@@ -26,22 +26,9 @@ export default {
         }
     },
     created(){
-        this.findArticleData()
     },
     methods:{
-        findArticleData(){
-            axios.get('/api/articles')
-            .then(e=>{
-                let data = e.data
-                if(data.data && Array.isArray(data.data)){
-                    this.articles = data.data
-                }
-                console.log(this.articles)
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-        }
+
     }
 }
 </script>

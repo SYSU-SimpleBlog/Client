@@ -2,7 +2,9 @@
     <div>
         <header class="header">
             <router-link to="/">Simple Blog</router-link>
-            <router-link v-if="this.$route.name ==='home'" style="float:right; margin-right: 50px;" to="/signin"><Icon type="ios-log-in" size="30" style="color: white;vertical-align: middle;"/>登录</router-link>
+            <router-link v-if="this.$route.name ==='home'" style="float:right; margin-right: 50px; font-size: 15px;" to="/signin">
+                <Button  ghost >登录</Button>
+            </router-link>
             <Input id="search" prefix="md-book" search placeholder="搜索..." @on-focus="expend" @on-blur="narrow"
                    style="float:right; width: 250px;  margin-right: 50px"/>
             <div style="clear: both"/>

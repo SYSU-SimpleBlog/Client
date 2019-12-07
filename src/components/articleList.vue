@@ -1,218 +1,144 @@
 <template>
-    <div id='articlelist'>
-        <h1 id='h1'>文章列表</h1>
+    <div id='articleList'>
+        <BackTop :height="100"></BackTop>
+        <h1>文章列表</h1>
         <ul>
-            <li id="list" v-for="(item,index) in articles":key="index">
+            <li v-for="(item, index) in articlesData" :key="index">
                 <div id='title'>
                     <router-link :to="{
 					path:'/articleDetail/',
 					name: 'articlePage',
-					params: {id: item.id}}">{{item.name}}
+					params: {id: item.id}}">
+                        {{item.name}}
                     </router-link>
-					<Icon type="ios-trash" id="icon" @click="deleteArticle(index)"/>
                 </div>
+                <span style="float: right" ><a @click="openDeleteModal(index)" style="color: black"><Icon type="md-trash" style="color: black"/>删除</a></span>
+                <Divider/>
             </li>
         </ul>
         <br/>
-			<nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center" id='pageul' style="display: flex;  justify-content:space-around">
-                <li class="page-item">
-                    <a class="page-link" aria-label="Previous" @click="switchToPage(1)">
-                        <span aria-hidden="true">First Page</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
+        <Page :total="this.articleNum" :page-size="10" size="small" show-total style="float: right; overflow: hidden" @on-change="handlePageTurn"/>
 
-                <li class="page-item">
-                    <a class="page-link" aria-label="Previous" @click="switchToPage(currentPage - 1)">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item">
-                    {{currentPage}}/{{totalPages}}
-                </li>
-                <li class="page-item" v-for="n in totalPages" v-if='n >= clowLimit && n <= chiLimit'
-                    :class="{active:n==currentPage}" :key="n">
-                    <a v-if='n == clowLimit && n > 1' class="page-link">...</a>
-                    <a v-else-if='n == chiLimit && n < totalPages' class="page-link">...</a>
-                    <a v-else href="#" @click="switchToPage(n)" class="page-link">{{n}}</a>
-                </li>
-
-                <li class="page-item">
-                    <a class="page-link" aria-label="Next" @click="switchToPage(currentPage + 1)">
-                        <span class="sr-only">Next</span>
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous" @click="switchToPage(totalPages)">
-                        <span aria-hidden="true">Last Page</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <Modal v-model="isDelete"
+                title="删除文章"
+                @on-ok="handleArticleDelete"
+                @on-cancel="cancelModal">
+            <p>是否确定删除文章？</p>
+        </Modal>
+        <br>
     </div>
 
 </template>
 
 <script>
-		import {GetArticles} from '../lib/api.js'
-			import {DeleteArticleById} from '../lib/api.js'
-			import axios from 'axios'
-			import qs from 'qs'
-		
-		
-			var currentPage=1;
-		    export default {
-		        name: "articleList",
-				created() {
-					this.getData()
-					this.findArticles()
-				},
-				data(){
-						return {
-							//namelist:namelist,
-							 namelist:[],
-							 articles:[]
-						}
-				},
-				props:{
-					currentPage: 1,
-					lowLimit: 1,
-					hiLimit: 8,
-					listSize: 10,
-					totalArticles: 100,
-					totalPages: 10,
-					loading: false,
-				},
-				methods:{
-					getData(){
-						let me=this
-						me.currentPage=1
-						me.lowLimit=1
-						me.hiLimit=10
-						me.listSize=10
-						me.totalArticles=100
-						me.totalPages=10
-					},
-					
-					switchToPage:function(pageNo) {
-					 if (pageNo <= 0 || pageNo > this.totalPages){
-					     return;
-					   }
-					   this.currentPage = pageNo
-					   //alert(this.currentPage)
-					   let me = this
-					   GetArticles({
-					     page: me.currentPage,
-					   })
-					   .then(function(res){
-					     me.articles = res.data.Articles
-					   })
-					   .catch(function(err) {
-					     me.articles = []
-						 alert("err:"+err)
-					   })
-					},
-					 findArticles(){
-						this.currentPage = 1
-						//alert(this.currentPage)
-						let me = this
-						GetArticles({
-						  page: me.currentPage,
-						})
-						.then(function(res){
-						  me.articles = res.data.Articles
-						  // me.articles=[1,2,3,4,5,6,7,8,9,0]
-						  me.totalPages=Math.ceil(res.data.PageCount/10)
-						})
-						.catch(function(err) {
-						  me.articles = []
-						})
-					},
-					deleteArticle(index){
-						let i=index
-						alert(this.articles[index].id)
-						DeleteArticleById({
-							id: index
-						})
-						.then(function(res){
-							
-						})
-						.catch(function(err){
-							alert(err)
-						})
-						let me = this
-							GetArticles({
-							  page: me.currentPage,
-							})
-							.then(function(res){
-							  me.articles = res.data.Articles
-							  // me.articles=[1,2,3,4,5,6,7,8,9,0]
-							  me.totalPages=Math.ceil(res.data.PageCount/10)
-							})
-							.catch(function(err) {
-							  me.articles = []
-							})
-						//alert(this.currentPage)
-					}
-					
-				}
-				
-		    }
-		</script>
-		
-		<style scoped>
-			#h1{
-				text-align: center;
-			}
-			#articlelist{
-				margin-top: 50px;
-				padding: 0 250px;
-			}
-			#list{
-				font-size: 25px;
-				list-style: none;
-				border-bottom: solid 1px #24292E ;
-				margin-bottom: 2px;
-				margin-top: 2px;
-				height: 50px;
-			}
-			#title{
-				width: 100%;
-				text-align: left;
-				height: 100%;
-				float: left;
-				padding: 5px;
-			}
-			#author{
-				width: 50%;
-				text-align: right;
-				height: 100%;
-				float: left;
-				padding: 5px;
-			}
-			#pageul{
-				
-				display: inline;
-				white-space: nowrap;
-			}
-			.page-item{
-				list-style: none;
-				display: inline-block;
-				margin: 3px;
-				margin-left: 80px;
-				text-align: center;
-				float: left;
-			}
-			#icon{
-				display: inline-block;
-				float: right;
-				margin:10px;
-			}
-		</style>
-	
-   
+    import { GetArticles } from '../lib/api.js'
+    import { DeleteArticleById } from '../lib/api.js'
+
+    export default {
+        name: "articleList",
+        components:{
+
+        },
+        data() {
+            return {
+                isDelete: false,
+                articlesData: [],
+                articleNum: 0,
+                currentPage: 1,
+                articlesDeleteId: -1
+            }
+        },
+        created() {
+            this.getArticlesData(this.currentPage)
+        },
+        methods: {
+            getArticlesData(pageNum) {
+                GetArticles({
+                    page: pageNum
+                }).then(res=>{
+                    this.articlesData = res.data.Articles
+                    this.articleNum = res.data.PageCount
+                }).catch(err=>{
+                    console.log(err)
+                })
+            },
+
+            handlePageTurn(page) {
+                this.currentPage = page
+                this.getArticlesData(this.currentPage)
+            },
+
+            openDeleteModal(index){
+                this.isDelete = true
+                this.articlesDeleteId = this.articlesData[index].id
+                console.log(this.articlesDeleteId)
+            },
+
+            cancelModal(){
+                this.isDelete = false
+                this.articlesDeleteId = -1
+                this.$Message.warning("取消删除")
+            },
+
+            handleArticleDelete(index){
+                console.log(index)
+
+                DeleteArticleById({
+                    id: this.articlesDeleteId
+                }).then(res=>{
+                    this.$Message.success("删除成功")
+                    this.getArticlesData(this.currentPage)
+                }).catch(err=>{
+                    console.log(err)
+                    this.$Message.error("未知错误，删除失败")
+                })
+            }
+
+        }
+    }
+</script>
+
+<style scoped>
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #articleList {
+        margin-top: 50px;
+        padding: 0 350px;
+    }
+
+    li{
+        list-style: none;
+        height:80px;
+    }
+
+    li span{
+        opacity: 0;
+    }
+
+    #title{
+        padding-left: 10px;
+        padding-top: 5px;
+        font-size: 20px;
+        height: 50px;
+    }
+
+    #title a{
+        color: #24292E;
+    }
+    #title a:hover{
+        color: chocolate;
+    }
+
+    li:hover{
+        background-color: #F5F6F7;
+    }
+
+    li:hover span{
+        opacity: 1;
+    }
+</style>
+
+
